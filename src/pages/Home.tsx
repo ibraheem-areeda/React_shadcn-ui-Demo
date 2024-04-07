@@ -1,36 +1,35 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Navbar from "@/components/NavBar";
-import { useState } from "react";
 import AddTask from "@/components/AddTask";
 import TasksList from "@/components/TasksList";
+import { atom, useAtom } from "jotai";
 
-// import { atom, useAtom } from 'jotai';
-
-// const counter = atom(0);
+const tasksListAtom = atom<Todo[]>([]);
+const taskInputAtom = atom("");
 
 export type Todo = {
   name: string;
 };
 
 const Home = () => {
-  const [tasksListData, setTasksList] = useState<Todo[]>([]);
-  const [taskInput, setTaskInput] = useState("");
+  const [tasksListData, settasksListAtom] = useAtom(tasksListAtom);
+  const [taskInput, settaskInputAtom] = useAtom(taskInputAtom);
 
   const handleAddTask = () => {
     if (taskInput.trim() !== "") {
-      setTasksList([...tasksListData, { name: taskInput }]);
-      setTaskInput("");
+      settasksListAtom([...tasksListData, { name: taskInput }]);
+      settaskInputAtom("");
     }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTaskInput(event.target.value);
+    settaskInputAtom(event.target.value);
   };
 
   const handleDelete = (index: number) => {
     const updatedTasksList = [...tasksListData];
     updatedTasksList.splice(index, 1);
-    setTasksList(updatedTasksList);
+    settasksListAtom(updatedTasksList);
   };
 
   return (
