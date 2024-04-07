@@ -1,17 +1,33 @@
+import { atom, useAtom, useSetAtom } from "jotai";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
-type TaskProps = {
-  taskInput: string;
-  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleAddTask: () => void;
+export type Todo = {
+  name: string;
 };
 
-const AddTask = ({
-  taskInput,
-  handleInputChange,
-  handleAddTask,
-}: TaskProps) => {
+// eslint-disable-next-line react-refresh/only-export-components
+export const taskInputAtom = atom("");
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const tasksListAtom = atom<Todo[]>([]);
+
+const AddTask = () => {
+  const [taskInput, settaskInputAtom] = useAtom(taskInputAtom);
+  const settasksListAtom = useSetAtom(tasksListAtom);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    settaskInputAtom(event.target.value);
+  };
+
+  const handleAddTask = () => {
+    if (taskInput.trim() !== "") {
+      // settasksListAtom([...tasksListData, { name: taskInput }]);
+      settasksListAtom((prev) => [...prev, { name: taskInput }]);
+      settaskInputAtom("");
+    }
+  };
+
   return (
     <div>
       <h1 className=" text-center my-10 text-3xl">To Do List</h1>

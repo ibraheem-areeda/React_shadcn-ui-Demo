@@ -8,14 +8,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { Todo } from "@/pages/Home";
+import { tasksListAtom } from "./AddTask";
+import { useAtom } from "jotai";
+import React, { Children } from "react";
 
-type TaskListProps = {
-  handleDelete: (index: number) => void;
-  tasksListData: Todo[];
-};
+const TasksList = () => {
+  const [tasksListData, settasksListAtom] = useAtom(tasksListAtom);
 
-const TasksList = ({ handleDelete, tasksListData }: TaskListProps) => {
+  const handleDelete = (index: number) => {
+    const updatedTasksList = [...tasksListData];
+    updatedTasksList.splice(index, 1);
+    settasksListAtom(updatedTasksList);
+  };
+
   return (
     <div>
       <Table className=" w-1/3 mx-auto">
@@ -26,8 +31,8 @@ const TasksList = ({ handleDelete, tasksListData }: TaskListProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tasksListData.map((task, index) => (
-            <>
+          {Children.toArray(
+            tasksListData.map((task, index) => (
               <TableRow>
                 <TableCell className="font-medium">
                   {task.name}
@@ -39,8 +44,8 @@ const TasksList = ({ handleDelete, tasksListData }: TaskListProps) => {
                   </span>
                 </TableCell>
               </TableRow>
-            </>
-          ))}
+            ))
+          )}
         </TableBody>
       </Table>
     </div>
