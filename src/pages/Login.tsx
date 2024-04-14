@@ -17,7 +17,7 @@ import { useContext } from "react";
 import AuthContext from "@/context/Auth";
 
 const Login = () => {
-  const { setUser } = useContext(AuthContext);
+  const { handelUserChange } = useContext(AuthContext);
   const navigate = useNavigate();
   const formSchema = z.object({
     username: z.string().min(2).max(50),
@@ -50,8 +50,7 @@ const Login = () => {
         }
       );
 
-      localStorage.setItem("userInfo", JSON.stringify(response.data));
-      setUser(() => response.data);
+      handelUserChange(response);
       navigate("/home");
     } catch (error) {
       console.error("Authentication failed:", error);
