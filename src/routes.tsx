@@ -1,20 +1,30 @@
-import { createBrowserRouter } from "react-router-dom"
-import Home from "./pages/Home"
-import AboutUs from "./pages/AboutUs"
+import { Navigate, createBrowserRouter } from "react-router-dom";
+import Home from "./pages/Home";
+import AboutUs from "./pages/AboutUs";
+import Login from "./pages/Login";
 
-export const router = createBrowserRouter([
+export const privateRoutes = createBrowserRouter([
   {
     path: "/",
-    element: <Home/>,
+    element: <Navigate to="/home" />,
+  },
+  {
+    path: "/home",
+    element: <Home />,
   },
   {
     path: "/about_us",
-    element: <AboutUs/>,
-    // children: [
-    //   {
-    //     index: true,
-    //     element: <Navigate to="/dashboard" />,
-    //   },
-    // ],
+    element: <AboutUs />,
   },
-])
+]);
+
+export const authRoutes = createBrowserRouter([
+  {
+    path: "/*",
+    element: <Navigate to="/" />,
+  },
+  {
+    path: "/",
+    element: <Login />,
+  },
+]);
