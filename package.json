@@ -19,6 +19,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "jotai": "^2.7.2",
+    "jwt-decode": "^4.0.0",
     "localforage": "^1.10.0",
     "lucide-react": "^0.364.0",
     "match-sorter": "^6.3.4",
