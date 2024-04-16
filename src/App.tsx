@@ -2,11 +2,12 @@
 
 import { RouterProvider } from "react-router-dom";
 import { authRoutes, privateRoutes } from "./routes";
-import AuthContext from "./context/Auth";
-import { useContext } from "react";
+import { atom, useAtom } from "jotai";
+import { userAtom } from "./pages/Home";
+import { log } from "console";
 
 function App() {
-  const { user } = useContext(AuthContext);
+  const [user] = useAtom(userAtom);
 
   return <RouterProvider router={user ? privateRoutes : authRoutes} />;
 }

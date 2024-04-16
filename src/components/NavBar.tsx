@@ -1,9 +1,8 @@
-import AuthContext from "@/context/Auth";
-import { useContext } from "react";
+import { userAtom } from "@/pages/Home";
+import { useAtom } from "jotai";
 
 const Navbar = () => {
-  const { user } = useContext(AuthContext);
-  console.log(11111111111, typeof user);
+  const [user] = useAtom(userAtom);
 
   const handelLogout = () => {
     localStorage.removeItem("userInfo");

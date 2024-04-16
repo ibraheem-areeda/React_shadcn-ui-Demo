@@ -12,13 +12,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import AuthContext from "@/context/Auth";
+import { userAtom } from "./Home";
+import { useSetAtom } from "jotai";
 
 const Login = () => {
-  const { handelUserChange } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const setUser = useSetAtom(userAtom);
+
+  const handelUserChange = (userData) => {
+    setUser(userData.data);
+    window.location.reload();
+  };
+
   const formSchema = z.object({
     username: z.string().min(2).max(50),
     Password: z.string().min(6),
@@ -41,17 +45,10 @@ const Login = () => {
         {
           identity: values.username,
           password: values.Password,
-        },
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
         }
       );
 
       handelUserChange(response);
-      navigate("/home");
     } catch (error) {
       console.error("Authentication failed:", error);
       localStorage.removeItem("token");
