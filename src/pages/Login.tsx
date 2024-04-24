@@ -40,13 +40,10 @@ const Login = () => {
     console.log(values);
 
     try {
-      const response = await axios.post(
-        "https://dev.api.portal.psi-crm.com/auth/login",
-        {
-          identity: values.username,
-          password: values.Password,
-        }
-      );
+      const response = await axios.post("http://127.0.0.1:8000/auth/login", {
+        username: values.username,
+        password: values.Password,
+      });
 
       handelUserChange(response);
     } catch (error) {

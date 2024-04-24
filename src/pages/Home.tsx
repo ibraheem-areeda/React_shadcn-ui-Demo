@@ -21,7 +21,7 @@ const Home = () => {
   const currentUser = async () => {
     try {
       const response = await axiosJWT.get(
-        "https://dev.api.portal.psi-crm.com/auth/currentUser"
+        "http://127.0.0.1:8000/auth/currentUser"
       );
       if (localStorageData.access_token && localStorageData.refresh_token) {
         setUser({
@@ -36,8 +36,18 @@ const Home = () => {
     }
   };
 
+  const getAllTasks = async () => {
+    try {
+      const responce = await axiosJWT.get("http://127.0.0.1:8000/task/all");
+      console.log(99999999999999999999, responce.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     currentUser();
+    getAllTasks();
   }, []);
 
   return (
