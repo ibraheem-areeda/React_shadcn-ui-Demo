@@ -14,12 +14,13 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { userAtom } from "./Home";
 import { useSetAtom } from "jotai";
+import { User } from "@/types/User";
 
 const Login = () => {
   const setUser = useSetAtom(userAtom);
 
-  const handelUserChange = (userData) => {
-    setUser(userData.data);
+  const handelUserChange = (userData: User) => {
+    setUser(userData);
     window.location.reload();
   };
 
@@ -45,7 +46,7 @@ const Login = () => {
         password: values.Password,
       });
 
-      handelUserChange(response);
+      handelUserChange(response.data);
     } catch (error) {
       console.error("Authentication failed:", error);
       localStorage.removeItem("token");

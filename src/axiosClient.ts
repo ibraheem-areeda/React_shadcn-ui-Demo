@@ -1,13 +1,15 @@
 import axios from "axios";
+import { User } from "./types/User";
 
 let isRefreshing = false;
-let failedRequests = [];
+const failedRequests:CallableFunction[] = [];
 
 export const axiosJWT = axios.create();
 
 axiosJWT.interceptors.request.use(
   async (config) => {
-    let userData = JSON.parse(localStorage.getItem("userInfo"));
+    const userLocalstorage = localStorage.getItem("userInfo");
+    const userData:User = userLocalstorage?JSON.parse(userLocalstorage):undefined
     console.log(4444444444444,userData);
     
     if (userData && userData.access_token) {
@@ -33,7 +35,8 @@ axiosJWT.interceptors.response.use(
       console.log("Refffffrsh");
       if (!isRefreshing) {
         isRefreshing = true
-        const userData = JSON.parse(localStorage.getItem("userInfo"));
+        const userLocalstorage = localStorage.getItem("userInfo");
+        const userData:User = userLocalstorage?JSON.parse(userLocalstorage):undefined
         try {
           const response = await axios.post('http://localhost:8000/auth/refreshToken', { refresh_token: userData?.refresh_token });
           localStorage.setItem(
@@ -57,7 +60,7 @@ axiosJWT.interceptors.response.use(
       }
 
       if(isRefreshing){
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           failedRequests.push(() => {
             resolve(axiosJWT(originalRequest))
           })
@@ -67,3 +70,4 @@ axiosJWT.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
