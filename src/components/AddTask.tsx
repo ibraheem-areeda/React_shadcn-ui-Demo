@@ -3,7 +3,9 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
 export type Todo = {
+  id: string;
   name: string;
+  status: boolean;
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -22,8 +24,12 @@ const AddTask = () => {
 
   const handleAddTask = () => {
     if (taskInput.trim() !== "") {
+      const taskId: string = uuidv4();
       // settasksListAtom([...tasksListData, { name: taskInput }]);
-      settasksListAtom((prev) => [...prev, { name: taskInput }]);
+      settasksListAtom((prev) => [
+        ...prev,
+        { id: taskId, name: taskInput, status: true },
+      ]);
       settaskInputAtom("");
     }
   };
@@ -46,3 +52,11 @@ const AddTask = () => {
 };
 
 export default AddTask;
+
+function uuidv4(): string {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0,
+      v = c == "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
