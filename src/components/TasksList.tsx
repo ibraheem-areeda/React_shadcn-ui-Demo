@@ -19,16 +19,13 @@ import { Badge } from "@/components/ui/badge";
 const TasksList = () => {
   const [tasksListData, settasksListAtom] = useAtom(tasksListAtom);
   const [updateTask, setUpdateTask] = useState<Todo | null>(null);
-  const [inputChange, setInputchange] = useState<string>("");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputchange(event.target.value);
-
     setUpdateTask((prevState) => {
       if (!prevState) return null;
       return {
         ...prevState,
-        name: inputChange,
+        name: event.target.value,
       };
     });
   };
@@ -49,17 +46,14 @@ const TasksList = () => {
     }
     console.log(tasksListData);
     setUpdateTask(null);
-    setInputchange("");
   };
 
   const handleDiscard = () => {
     setUpdateTask(null);
-    setInputchange("");
   };
 
   const openEditFeild = (task: Todo) => {
     setUpdateTask(task);
-    setInputchange(task.name);
   };
   const handleStateChangeFromSwitch = () => {
     setUpdateTask((prev: Todo | null) => {
@@ -78,7 +72,6 @@ const TasksList = () => {
       (todo) => todo.id == task?.id
     );
     if (task) {
-      // tasksListData.splice(index, 1, task);
       settasksListAtom((prev) => {
         const prevCopy = [...prev];
         prevCopy[index] = task;
@@ -119,7 +112,7 @@ const TasksList = () => {
                 {updateTask?.id == task.id ? (
                   <div className=" flex flex-row gap-2">
                     <Input
-                      value={inputChange}
+                      value={updateTask.name}
                       onChange={(e) => handleInputChange(e)}
                     />
 

@@ -1,7 +1,7 @@
 import { atom, useSetAtom } from "jotai";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export type Todo = {
   id: string;
@@ -16,8 +16,12 @@ const AddTask = () => {
   const [taskInput, settaskInput] = useState("");
   const settasksListAtom = useSetAtom(tasksListAtom);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    settaskInput(event.target.value);
+  const handleInputChange = (
+    value: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    event: React.ChangeEvent<HTMLInputElement> | null = null
+  ) => {
+    settaskInput(value);
   };
 
   const handleAddTask = () => {
@@ -44,7 +48,7 @@ const AddTask = () => {
         }}
         className=" my-5 w-96 mx-auto"
         value={taskInput}
-        onChange={handleInputChange}
+        onChange={(event) => handleInputChange(event.target.value)}
       />
       <div className="flex flex-col items-center">
         <Button onClick={handleAddTask} className="w-40">
