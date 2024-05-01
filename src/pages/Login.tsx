@@ -21,7 +21,6 @@ const Login = () => {
 
   const handelUserChange = (userData: User) => {
     setUser(userData);
-    window.location.reload();
   };
 
   const formSchema = z.object({
@@ -80,7 +79,11 @@ const Login = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter Your Password" {...field} />
+                    <Input
+                      placeholder="Enter Your Password"
+                      {...field}
+                      type="password"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

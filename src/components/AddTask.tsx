@@ -1,6 +1,7 @@
-import { atom, useAtom, useSetAtom } from "jotai";
+import { atom, useSetAtom } from "jotai";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { useState } from "react";
 
 export type Todo = {
   id: string;
@@ -9,17 +10,14 @@ export type Todo = {
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const taskInputAtom = atom("");
-
-// eslint-disable-next-line react-refresh/only-export-components
 export const tasksListAtom = atom<Todo[]>([]);
 
 const AddTask = () => {
-  const [taskInput, settaskInputAtom] = useAtom(taskInputAtom);
+  const [taskInput, settaskInput] = useState("");
   const settasksListAtom = useSetAtom(tasksListAtom);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    settaskInputAtom(event.target.value);
+    settaskInput(event.target.value);
   };
 
   const handleAddTask = () => {
@@ -30,7 +28,7 @@ const AddTask = () => {
         ...prev,
         { id: taskId, name: taskInput, status: true },
       ]);
-      settaskInputAtom("");
+      settaskInput("");
     }
   };
 
@@ -38,6 +36,12 @@ const AddTask = () => {
     <div>
       <h1 className=" text-center my-10 text-3xl">To Do List</h1>
       <Input
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            console.log("okkkkkk");
+            handleAddTask();
+          }
+        }}
         className=" my-5 w-96 mx-auto"
         value={taskInput}
         onChange={handleInputChange}

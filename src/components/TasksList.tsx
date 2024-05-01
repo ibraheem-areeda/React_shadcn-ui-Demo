@@ -14,6 +14,7 @@ import React, { Children, useState } from "react";
 import { Input } from "./ui/input";
 import { CheckIcon, PenIcon, XIcon } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
 
 const TasksList = () => {
   const [tasksListData, settasksListAtom] = useAtom(tasksListAtom);
@@ -46,6 +47,7 @@ const TasksList = () => {
       tasksListData.splice(index, 1, updateTask);
       settasksListAtom(tasksListData);
     }
+    console.log(tasksListData);
     setUpdateTask(null);
     setInputchange("");
   };
@@ -59,16 +61,47 @@ const TasksList = () => {
     setUpdateTask(task);
     setInputchange(task.name);
   };
-
-  const handelUpdateswitch = () => {
-    setUpdateTask((prevState) => {
-      if (!prevState) return null;
-      return {
-        ...prevState,
-        status: !prevState.status,
-      };
+  const handleStateChangeFromSwitch = () => {
+    setUpdateTask((prev: Todo | null) => {
+      if (prev) {
+        return { ...prev, status: !prev.status };
+      } else {
+        return null; // Return null if prev is null
+      }
     });
   };
+
+  // SHALOW COPY
+  const handleStateChange = (task: Todo) => {
+    task.status = !task.status;
+    const index: number = tasksListData.findIndex(
+      (todo) => todo.id == task?.id
+    );
+    if (task) {
+      // tasksListData.splice(index, 1, task);
+      settasksListAtom((prev) => {
+        const prevCopy = [...prev];
+        prevCopy[index] = task;
+        return prevCopy;
+      });
+    }
+    console.log(tasksListData);
+  };
+  // DEEP COPY
+  // const handleStateChange = (task: Todo) => {
+  //   task.status = !task.status;
+  //   const index: number = tasksListData.findIndex(
+  //     (todo) => todo.id == task?.id
+  //   );
+  //   if (task) {
+  //     // tasksListData.splice(index, 1, task);
+  //     settasksListAtom((prev) => {
+  //       const prevCopy = JSON.parse(JSON.stringify(prev));
+  //       prevCopy[index] = task;
+  //       return prevCopy;
+  //     });
+  //   }
+  // };
 
   return (
     <div>
@@ -94,7 +127,7 @@ const TasksList = () => {
                       <p>Change State</p>
                       <Switch
                         checked={updateTask.status}
-                        onCheckedChange={handelUpdateswitch}
+                        onCheckedChange={() => handleStateChangeFromSwitch()}
                       />
                       <span className=" cursor-pointer">
                         <CheckIcon className=" size-5" onClick={saveEdit} />
@@ -109,13 +142,26 @@ const TasksList = () => {
                     <div className="flex gap-2">
                       <div className="flex-1">{task.name}</div>
                       <div className="flex-1">
-                        <div className=" inline-block bg-slate-400 py-2 min-w-24 rounded-lg">
+                        <span
+                          className=" cursor-pointer"
+                          onClick={() => handleStateChange(task)}
+                        >
                           {task.status ? (
-                            <p className=" text-center">Active</p>
+                            <Badge
+                              variant="outline"
+                              className=" bg-green-500 text-white min-w-24 justify-center"
+                            >
+                              Active
+                            </Badge>
                           ) : (
-                            <p className=" text-center">Not Active</p>
+                            <Badge
+                              variant="outline"
+                              className=" bg-red-600 text-white  min-w-24 justify-center"
+                            >
+                              Not Active
+                            </Badge>
                           )}
-                        </div>
+                        </span>
                       </div>
                       <div className="flex gap-2">
                         <span
