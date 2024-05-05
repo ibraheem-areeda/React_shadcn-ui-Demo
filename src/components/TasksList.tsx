@@ -13,8 +13,14 @@ import { useAtom } from "jotai";
 import React, { Children, useState } from "react";
 import { Input } from "./ui/input";
 import { CheckIcon, PenIcon, XIcon } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const TasksList = () => {
   const [tasksListData, settasksListAtom] = useAtom(tasksListAtom);
@@ -45,6 +51,7 @@ const TasksList = () => {
       settasksListAtom(tasksListData);
     }
     console.log(tasksListData);
+
     setUpdateTask(null);
   };
 
@@ -55,31 +62,34 @@ const TasksList = () => {
   const openEditFeild = (task: Todo) => {
     setUpdateTask(task);
   };
-  const handleStateChangeFromSwitch = () => {
-    setUpdateTask((prev: Todo | null) => {
-      if (prev) {
-        return { ...prev, status: !prev.status };
-      } else {
-        return null; // Return null if prev is null
-      }
+
+  const handleSelectChange = (value: "Pending" | "Active" | "Not active") => {
+    setUpdateTask((prevState) => {
+      if (!prevState) return null;
+      return {
+        ...prevState,
+        status: value,
+      };
     });
   };
 
   // SHALOW COPY
-  const handleStateChange = (task: Todo) => {
-    task.status = !task.status;
-    const index: number = tasksListData.findIndex(
-      (todo) => todo.id == task?.id
-    );
-    if (task) {
-      settasksListAtom((prev) => {
-        const prevCopy = [...prev];
-        prevCopy[index] = task;
-        return prevCopy;
-      });
-    }
-    console.log(tasksListData);
-  };
+
+  // const handleStateChange = (task: Todo) => {
+  //   task.status = !task.status;
+  //   const index: number = tasksListData.findIndex(
+  //     (todo) => todo.id == task?.id
+  //   );
+  //   if (task) {
+  //     settasksListAtom((prev) => {
+  //       const prevCopy = [...prev];
+  //       prevCopy[index] = task;
+  //       return prevCopy;
+  //     });
+  //   }
+  //   console.log(tasksListData);
+  // };
+
   // DEEP COPY
   // const handleStateChange = (task: Todo) => {
   //   task.status = !task.status;
@@ -95,6 +105,22 @@ const TasksList = () => {
   //     });
   //   }
   // };
+
+  const getBadgetVariant = (status: "Pending" | "Active" | "Not active") => {
+    switch (status) {
+      case "Pending":
+        return "pending";
+
+      case "Active":
+        return "active";
+
+      case "Not active":
+        return "notActive";
+
+      default:
+        return "default";
+    }
+  };
 
   return (
     <div>
@@ -117,11 +143,21 @@ const TasksList = () => {
                     />
 
                     <div className="flex gap-2 items-center">
-                      <p>Change State</p>
-                      <Switch
-                        checked={updateTask.status}
-                        onCheckedChange={() => handleStateChangeFromSwitch()}
-                      />
+                      <Select
+                        value={updateTask.status}
+                        onValueChange={(
+                          value: "Pending" | "Active" | "Not active"
+                        ) => handleSelectChange(value)}
+                      >
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Select value" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Pending">Pending</SelectItem>
+                          <SelectItem value="Active">Active</SelectItem>
+                          <SelectItem value="Not active">Not active</SelectItem>
+                        </SelectContent>
+                      </Select>
                       <span className=" cursor-pointer">
                         <CheckIcon className=" size-5" onClick={saveEdit} />
                       </span>
@@ -135,26 +171,9 @@ const TasksList = () => {
                     <div className="flex gap-2">
                       <div className="flex-1">{task.name}</div>
                       <div className="flex-1">
-                        <span
-                          className=" cursor-pointer"
-                          onClick={() => handleStateChange(task)}
-                        >
-                          {task.status ? (
-                            <Badge
-                              variant="outline"
-                              className=" bg-green-500 text-white min-w-24 justify-center"
-                            >
-                              Active
-                            </Badge>
-                          ) : (
-                            <Badge
-                              variant="outline"
-                              className=" bg-red-600 text-white  min-w-24 justify-center"
-                            >
-                              Not Active
-                            </Badge>
-                          )}
-                        </span>
+                        <Badge variant={getBadgetVariant(task.status)}>
+                          {task.status}
+                        </Badge>
                       </div>
                       <div className="flex gap-2">
                         <span

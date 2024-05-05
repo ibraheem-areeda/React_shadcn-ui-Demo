@@ -7,6 +7,7 @@ import { User } from "@/types/User";
 import { atomWithStorage } from "jotai/utils";
 import { useEffect, useState } from "react";
 import { useAtom, useSetAtom } from "jotai";
+import { log } from "console";
 
 const userLocalstorage = localStorage.getItem("userInfo");
 

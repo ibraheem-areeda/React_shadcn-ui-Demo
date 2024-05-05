@@ -6,7 +6,7 @@ import React, { useState } from "react";
 export type Todo = {
   id: string;
   name: string;
-  status: boolean;
+  status: "Pending" | "Active" | "Not active";
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -30,7 +30,7 @@ const AddTask = () => {
       // settasksListAtom([...tasksListData, { name: taskInput }]);
       settasksListAtom((prev) => [
         ...prev,
-        { id: taskId, name: taskInput, status: true },
+        { id: taskId, name: taskInput, status: "Pending" },
       ]);
       settaskInput("");
     }
