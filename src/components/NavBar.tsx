@@ -34,7 +34,7 @@ const Navbar = () => {
   }, [darkMode]);
 
   return (
-    <div className="h-12 text-red-500 p-4 flex items-center justify-between border-b-red-500 uppercase md:h-24 lg:px-10 xl:px-20 bg-slate-700">
+    <div className="h-12 text-red-500 p-4 flex items-center justify-between border-b-red-500 uppercase md:h-24 lg:px-10 xl:px-20 bg-slate-700 dark:bg-slate-50">
       <div className=" hidden md:flex gap-4">
         <a href="/">Home Page</a>
         <a href="/about_us">Contact Us</a>
@@ -47,7 +47,7 @@ const Navbar = () => {
         <span>chanege mode</span>
         <Switch
           defaultChecked={false}
-          onCheckedChange={() => setDarkMode(!darkMode)}
+          onCheckedChange={(prev) => setDarkMode(!prev)}
         />
       </div>
     </div>
