@@ -2,6 +2,7 @@ import { Navigate, createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
 import Login from "./pages/Login";
+import Settings from "./pages/Settings";
 
 export const privateRoutes = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ export const privateRoutes = createBrowserRouter([
   {
     path: "/about_us",
     element: <AboutUs />,
+  },
+  {
+    path: "/settings",
+    element: <Settings />,
   },
 ]);
 

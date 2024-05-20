@@ -43,7 +43,7 @@ axiosJWT.interceptors.response.use(
           : undefined;
         try {
           const response = await axios.post(
-            "http://localhost:8000/auth/refreshToken",
+            "https://dev.api.portal.psi-crm.com/auth/refreshToken",
             { refresh_token: userData?.refresh_token }
           );
           localStorage.setItem(
